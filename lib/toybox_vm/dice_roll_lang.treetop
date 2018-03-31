@@ -1,0 +1,172 @@
+require 'toybox_vm/parser_methods'
+require 'toybox_vm/syntax_node/left_associative'
+
+module ToyboxVm
+  grammar DiceRollLang
+    include ParserMethods
+
+    rule expression
+      comparative / additive
+    end
+
+    rule comparative
+      less_than
+    end
+
+    rule less_than
+      left:additive '<' right:additive {
+        def to_ast
+          Ast::LessThan.new(left.to_ast, right.to_ast)
+        end
+      }
+    end
+
+    rule additive
+      first:multitive
+      rest:(operator:additive_op operand:multitive)* {
+        def to_ast
+          SyntaxNode::LeftAssociative.to_ast(first, rest)
+        end
+      }
+    end
+
+    rule additive_op
+      '+' {
+        def ast_class
+          Ast::Add
+        end
+      }
+      /
+      '-' {
+        def ast_class
+          Ast::Subtract
+        end
+      }
+    end
+
+    rule multitive
+      first:primary
+      rest:(operator:multitive_op operand:primary)* {
+        def to_ast
+          SyntaxNode::LeftAssociative.to_ast(first, rest)
+        end
+      }
+    end
+
+    rule multitive_op
+      '*' {
+        def ast_class
+          Ast::Multiply
+        end
+      }
+      /
+      '/' {
+        def ast_class
+          Ast::Divide
+        end
+      }
+    end
+
+    rule primary
+      add_roll
+      /
+      num_range
+      /
+      '(' expression ')' {
+        def to_ast
+          expression.to_ast
+        end
+      }
+      /
+      number
+    end
+
+    rule add_roll
+      num:rand_primary [Dd] faces:number {
+        def to_ast
+          Ast::AddRoll.new(num.to_ast, faces.to_ast)
+        end
+      }
+    end
+
+    rule num_range
+      '[' min:number_additive '.' 2..3 max:number_additive ']' {
+        def to_ast
+          Ast::NumRange.new(min.to_ast, max.to_ast)
+        end
+      }
+    end
+
+    rule number
+      '0' {
+        def to_ast
+          Ast::Number.new(0)
+        end
+      }
+      /
+      [1-9] [0-9]* {
+        def to_ast
+          Ast::Number.new(text_value.to_i)
+        end
+      }
+    end
+
+    rule rand_primary
+      '(' rand_additive ')' {
+        def to_ast
+          rand_additive.to_ast
+        end
+      }
+      /
+      num_range
+      /
+      number
+    end
+
+    rule rand_additive
+      first:rand_multitive
+      rest:(operator:additive_op operand:rand_multitive)* {
+        def to_ast
+          SyntaxNode::LeftAssociative.to_ast(first, rest)
+        end
+      }
+    end
+
+    rule rand_multitive
+      first:rand_primary
+      rest:(operator:multitive_op operand:rand_primary)* {
+        def to_ast
+          SyntaxNode::LeftAssociative.to_ast(first, rest)
+        end
+      }
+    end
+
+    rule number_additive
+      first:number_multitive
+      rest:(operator:additive_op operand:number_multitive)* {
+        def to_ast
+          SyntaxNode::LeftAssociative.to_ast(first, rest)
+        end
+      }
+    end
+
+    rule number_multitive
+      first:number_primary
+      rest:(operator:multitive_op operand:number_primary)* {
+        def to_ast
+          SyntaxNode::LeftAssociative.to_ast(first, rest)
+        end
+      }
+    end
+
+    rule number_primary
+      '(' number_additive ')' {
+        def to_ast
+          number_additive.to_ast
+        end
+      }
+      /
+      number
+    end
+  end
+end
