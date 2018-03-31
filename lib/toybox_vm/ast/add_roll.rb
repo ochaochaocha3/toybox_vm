@@ -30,19 +30,19 @@ module ToyboxVm
         "(add-roll #{num_of_dice.to_s_exp} #{max_value.to_s_exp})"
       end
 
-      def reduce(roll_results)
+      def reduce(state)
         if num_of_dice.reducible?
-          reduced_num_of_dice, new_roll_results = num_of_dice.reduce(roll_results)
-          [self.class.new(reduced_num_of_dice, max_value), new_roll_results]
+          reduced_num_of_dice = num_of_dice.reduce(state)
+          self.class.new(reduced_num_of_dice, max_value)
         elsif max_value.reducible?
-          reduced_max_value, new_roll_results = max_value.reduce(roll_results)
-          [self.class.new(num_of_dice, reduced_max_value), new_roll_results]
+          reduced_max_value, new_roll_results = max_value.reduce(state)
+          self.class.new(num_of_dice, reduced_max_value)
         else
-          on_both_are_reduced(roll_results)
+          on_both_are_reduced(state)
         end
       end
 
-      def on_both_are_reduced(current_roll_results)
+      def on_both_are_reduced(state)
         num_of_dice_value = num_of_dice.value
 
         unless num_of_dice_value > 0
@@ -51,12 +51,11 @@ module ToyboxVm
 
         max_value_value = max_value.value
 
-        # TODO: テストの場合は外部からふった結果を読み込む必要がある
         roll_results = Array.new(num_of_dice.value) {
-          DieRollResult.new(rand(1..max_value_value), max_value_value)
+          state.roll_die!(max_value_value)
         }
 
-        [AddRollResult.new(self, roll_results), current_roll_results + roll_results]
+        AddRollResult.new(self, roll_results)
       end
     end
   end

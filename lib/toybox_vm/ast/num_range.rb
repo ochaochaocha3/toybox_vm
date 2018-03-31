@@ -28,28 +28,16 @@ module ToyboxVm
         "(num-range #{min.to_s_exp} #{max.to_s_exp})"
       end
 
-      def reduce(roll_results)
+      def reduce(state)
         if min.reducible?
-          reduced_min, new_roll_results = min.reduce(roll_results)
-          [self.class.new(reduced_min, max), new_roll_results]
+          reduced_min, new_roll_results = min.reduce(state)
+          self.class.new(reduced_min, max)
         elsif max.reducible?
-          reduced_max, new_roll_results = max.reduce(roll_results)
-          [self.class.new(min, reduced_max), new_roll_results]
+          reduced_max, new_roll_results = max.reduce(state)
+          self.class.new(min, reduced_max)
         else
-          on_both_are_reduced(roll_results)
+          state.get_value_in_num_range!(self)
         end
-      end
-
-      def on_both_are_reduced(roll_results)
-        min_value = min.value
-        max_value = max.value
-
-        if min_value > max_value
-          raise RangeError, "NumRange: min must be equal or less than max (min = #{min}, max = #{max})"
-        end
-
-        value = rand(min_value..max_value)
-        [Number.new(value), roll_results]
       end
     end
   end

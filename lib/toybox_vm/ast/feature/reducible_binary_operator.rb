@@ -7,20 +7,20 @@ module ToyboxVm
           true
         end
 
-        def reduce(roll_results)
+        def reduce(state)
           if left.reducible?
-            reduced_left, new_roll_results = left.reduce(roll_results)
-            [self.class.new(reduced_left, right), new_roll_results]
+            reduced_left = left.reduce(state)
+            self.class.new(reduced_left, right)
           elsif right.reducible?
-            reduced_right, new_roll_results = right.reduce(roll_results)
-            [self.class.new(left, reduced_right), new_roll_results]
+            reduced_right = right.reduce(state)
+            self.class.new(left, reduced_right)
           else
-            on_both_are_reduced(roll_results)
+            on_both_are_reduced(state)
           end
         end
 
-        def on_both_are_reduced(roll_results)
-          [self, roll_results]
+        def on_both_are_reduced(*)
+          self
         end
 
         def determined?

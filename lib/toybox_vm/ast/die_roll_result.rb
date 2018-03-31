@@ -8,6 +8,10 @@ module ToyboxVm
       def to_s
         "D#{max_value} -> #{value}"
       end
+
+      def to_s_exp
+        "(die-roll-result #{value} #{max_value})"
+      end
     end
   end
 end

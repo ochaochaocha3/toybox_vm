@@ -19,8 +19,8 @@ module ToyboxVm
         "(< #{left.to_s_exp} #{right.to_s_exp})"
       end
 
-      def on_both_are_reduced(roll_results)
-        [Boolean.new(left.value < right.value), roll_results]
+      def on_both_are_reduced(*)
+        Boolean.new(left.value < right.value)
       end
     end
   end

@@ -18,7 +18,7 @@ module ToyboxVm
       )
 
       test 'irreducible' do |ast|
-        refute(ast.reducible?)
+        assert { !ast.reducible? }
       end
 
       data(
@@ -27,7 +27,7 @@ module ToyboxVm
       )
 
       test 'determined' do |ast|
-        assert(ast.determined?)
+        assert { ast.determined? }
       end
     end
   end

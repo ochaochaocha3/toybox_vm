@@ -38,7 +38,7 @@ module ToyboxVm
       )
 
       test 'reducible' do |ast|
-        assert(ast.reducible?)
+        assert { ast.reducible? }
       end
     end
   end

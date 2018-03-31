@@ -23,7 +23,7 @@ module ToyboxVm
       end
 
       def precedence
-        10000
+        20
       end
 
       def to_s
@@ -32,11 +32,11 @@ module ToyboxVm
       end
 
       def to_s_exp
-        "(add-roll-results #{value.to_s} #{add_roll.to_s_exp})"
+        "(add-roll-result #{value} #{add_roll.to_s_exp})"
       end
 
-      def reduce(roll_results)
-        [Number.new(value), roll_results]
+      def reduce(*)
+        Number.new(value)
       end
     end
   end

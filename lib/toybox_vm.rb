@@ -5,6 +5,7 @@ end
 require 'toybox_vm/version'
 
 require 'toybox_vm/ast'
+require 'toybox_vm/machine_state'
 require 'toybox_vm/machine'
 
 require 'treetop'
