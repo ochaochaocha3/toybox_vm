@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["ochaochaocha3@gmail.com"]
 
   spec.summary       = 'Evaluates dice rolls and stores the result for tabletop RPG tools.'
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.homepage      = "https://github.com/ochaochaocha3/toybox_vm"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
