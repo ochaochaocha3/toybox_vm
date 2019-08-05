@@ -176,7 +176,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/ochaoc
 
 ## License
 
-The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
 
 [BCDice]: https://github.com/torgtaitai/BCDice
 [DodontoF]: http://www.dodontof.com/
