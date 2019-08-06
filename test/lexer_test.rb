@@ -206,7 +206,7 @@ module ToyboxVm
       ])
     )
 
-    test '字句解析で正しいトークンを返す' do |data|
+    test '字句解析器が正しいトークンを返す' do |data|
       lexer = Lexer.new(data.input)
 
       actual = []
