@@ -8,7 +8,7 @@ rule
   expr
     : integer
     | MINUS expr =UNARY_MINUS {
-      result = s(:unary_minus, val[1])
+      result = AST::Node.new(:unary_minus, [val[1]], token: val[0])
     }
     | PLUS expr =UNARY_PLUS {
       result = val[1]
@@ -17,7 +17,7 @@ rule
   integer
     : INTEGER {
       value = val[0].literal.to_i
-      result = s(:integer, value)
+      result = AST::Node.new(:integer, [value], token: val[0])
     }
 end
 
@@ -27,8 +27,6 @@ require 'ast'
 require 'toybox_vm/lexer'
 
 ---- inner
-
-include AST::Sexp
 
 attr_reader :input
 
