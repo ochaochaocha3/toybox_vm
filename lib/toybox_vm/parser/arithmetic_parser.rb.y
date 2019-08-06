@@ -1,8 +1,18 @@
 class ToyboxVm::Parser::ArithmeticParser
 
+prechigh
+  nonassoc UNARY_MINUS UNARY_PLUS
+preclow
+
 rule
   expr
     : integer
+    | MINUS expr =UNARY_MINUS {
+      result = s(:unary_minus, val[1])
+    }
+    | PLUS expr =UNARY_PLUS {
+      result = val[1]
+    }
 
   integer
     : INTEGER {
