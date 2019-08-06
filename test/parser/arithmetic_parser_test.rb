@@ -29,6 +29,32 @@ module ToyboxVm
       )
       parser_test_data('+1', false, s(:integer, 1))
 
+      # 算術演算子
+      parser_test_data(
+        '1+2', false,
+        s(:add,
+          s(:integer, 1),
+          s(:integer, 2))
+      )
+      parser_test_data(
+        '1-2', false,
+        s(:subtract,
+          s(:integer, 1),
+          s(:integer, 2))
+      )
+      parser_test_data(
+        '1*2', false,
+        s(:multiply,
+          s(:integer, 1),
+          s(:integer, 2))
+      )
+      parser_test_data(
+        '1/2', false,
+        s(:divide,
+          s(:integer, 1),
+          s(:integer, 2))
+      )
+
       test '構文解析器が正しい抽象構文木を返す' do |data|
         parser = ArithmeticParser.new(data.input)
 

@@ -2,6 +2,8 @@ class ToyboxVm::Parser::ArithmeticParser
 
 prechigh
   nonassoc UNARY_MINUS UNARY_PLUS
+  ASTERISK SLASH
+  PLUS MINUS
 preclow
 
 rule
@@ -12,6 +14,18 @@ rule
     }
     | PLUS expr =UNARY_PLUS {
       result = val[1]
+    }
+    | expr PLUS expr {
+      result = AST::Node.new(:add, [val[0], val[2]], token: val[1])
+    }
+    | expr MINUS expr {
+      result = AST::Node.new(:subtract, [val[0], val[2]], token: val[1])
+    }
+    | expr ASTERISK expr {
+      result = AST::Node.new(:multiply, [val[0], val[2]], token: val[1])
+    }
+    | expr SLASH expr {
+      result = AST::Node.new(:divide, [val[0], val[2]], token: val[1])
     }
 
   integer
