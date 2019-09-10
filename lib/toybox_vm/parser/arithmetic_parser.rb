@@ -1,9 +1,21 @@
+# frozen_string_literal: true
+
 require 'parslet'
 
 module ToyboxVm
   module Parser
     class ArithmeticParser < Parslet::Parser
-      root(:primary)
+      root(:additive)
+
+      rule(:additive) {
+        multitive.as(:first) >>
+        (match['-+'].as(:op) >> multitive.as(:operand)).repeat.as(:rest)
+      }
+
+      rule(:multitive) {
+        primary.as(:first) >>
+        (match['*/'].as(:op) >> primary.as(:operand)).repeat.as(:rest)
+      }
 
       rule(:primary) { unary_plus | unary_minus | integer }
       rule(:unary_plus) { str('+') >> primary }
