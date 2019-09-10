@@ -21,7 +21,6 @@ module ToyboxVm
     parser_test_data('1', false, s(:integer, 1))
     parser_test_data('42', false, s(:integer, 42))
 
-=begin
     # 単項演算子
     parser_test_data(
       '-1', false,
@@ -30,6 +29,7 @@ module ToyboxVm
     )
     parser_test_data('+1', false, s(:integer, 1))
 
+=begin
     # 算術演算子
     parser_test_data(
       '1+2', false,
